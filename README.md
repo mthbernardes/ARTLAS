@@ -21,6 +21,8 @@ sudo apt-get install screen #Debian Like
 sbopkg -i screen    # Slackware 14.* 
 yum install screen # CentOS/RHEL   
 dnf install screeen  # Fedora 
+<i>screen tutorial [pt_Br]</i>
+http://www.nanoshots.com.br/2016/05/screen-dicas-de-administracao-de-varios.html
 </pre>
 
 <h3>Configuration</h3>
