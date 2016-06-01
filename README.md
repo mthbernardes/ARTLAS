@@ -12,6 +12,12 @@ https://dev.itratos.de/projects/php-ids/repository/raw/trunk/lib/IDS/default_fil
 <b>Clone project</b>
 git clone https://github.com/mthbernardes/ARTLAS.git
 
+<b>Install screen</b>
+sudo apt-get install screen #Debian Like
+sbopkg -i screen    # Slackware 14.* 
+yum install screen # CentOS/RHEL   
+dnf install screeen  # Fedora 
+
 <b>Install dependencies</b>
 pip install -r dependencies.txt
 python version 2.7.11(lastet)
@@ -39,6 +45,9 @@ apache_log = Full path apache access.log
 rules = default_filter.json It's the file that contains the OWASP filter <b><i>[Do not Change]</i></b>
 </pre>
 
-<h3>Telegram Notification example</h3>
+<h3>How to start</h3>
+<pre>
+
+
 
 <img src="https://raw.githubusercontent.com/mthbernardes/ARTLAS/master/img/notification.png" width="350"/>
