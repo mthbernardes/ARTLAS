@@ -2,6 +2,9 @@
 
 <p>
 Real time  Apache log analyzer, based on top 10 OWASP vulnerabilities, identifies attempts of exploration in your web application, and notify you or your incident team on Telegram.
+
+ARTLAS uses the regular expression from the PHP-IDS project, to identify the attempts of exploration, download link to the latest version of the file
+https://dev.itratos.de/projects/php-ids/repository/raw/trunk/lib/IDS/default_filter.xml
 </p>
 
 <h3>Installation</h3>
@@ -32,7 +35,7 @@ enable = True to enable  or False to disable
 <b>GENERAL CONFIGURATION</b>
 [Files]
 apache_log = Full path apache access.log
-rules = default_filter.xml <b><i>[Do not Change]</i></b>
+rules = default_filter.xml It's the file that contains the OWASP filter <b><i>[Do not Change]</i></b>
 </pre>
 
 <h3>Telegram Notification example</h3>
