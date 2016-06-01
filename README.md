@@ -35,5 +35,6 @@ apache_log = Full path apache access.log
 rules = default_filter.xml <b><i>Do not Change</i></b>
 </pre>
 
-<h3>Telegram Notification</h3>
+<h3>Telegram Notification example</h3>
+
 <img src="https://raw.githubusercontent.com/mthbernardes/ARTLAS/master/img/notification.png" width="350"/>
