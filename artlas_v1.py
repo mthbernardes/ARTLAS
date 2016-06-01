@@ -85,7 +85,7 @@ if conf['zabbix_enable'] == 'True':
     zapi.login(username, password)
     print '[+] - Zabbix Enabled'
 
-rules = xmltodict.parse(open(conf['rules']).read(),process_namespaces=True)
+rules = json.loads(open(conf['rules']).read())
 
 while True:
     for linha in Pygtail(conf['apache_log']):
