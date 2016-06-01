@@ -5,7 +5,7 @@ Real time  Apache log analyzer, based on top 10 OWASP vulnerabilities, identifie
 </p>
 <p>
 ARTLAS uses the regular expression from the PHP-IDS project, to identify the attempts of exploration, download link to the latest version of the file
-https://dev.itratos.de/projects/php-ids/repository/raw/trunk/lib/IDS/default_filter.json
+<a href="https://dev.itratos.de/projects/php-ids/repository/raw/trunk/lib/IDS/default_filter.json">Download File</a>
 </p>
 <h3>Installation</h3>
 <pre>
@@ -21,8 +21,8 @@ sudo apt-get install screen #Debian Like
 sbopkg -i screen    # Slackware 14.* 
 yum install screen # CentOS/RHEL   
 dnf install screeen  # Fedora 
-<i>screen tutorial [pt_Br]</i>
-http://www.nanoshots.com.br/2016/05/screen-dicas-de-administracao-de-varios.html
+
+<a href="http://www.nanoshots.com.br/2016/05/screen-dicas-de-administracao-de-varios.html"><i>screen tutorial [pt_Br]</i></a>
 </pre>
 
 <h3>Configuration</h3>
