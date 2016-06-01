@@ -14,7 +14,8 @@ pip install -r dependencies.txt
 </pre>
 
 <h3>Configuration</h3>
-<pre>Edit the file etc/artlas.conf
+<pre>All your configurations will be made in <b>etc/artlas.conf</b> file.
+
 <b>TELEGRAM INTEGRATION</b>
 <i>[Telegram]
 api = Your Token API
