@@ -1,7 +1,7 @@
-import xmltodict,sys,re,requests,json,telepot
 from pygtail import Pygtail
 from lxml import html
 from pyzabbix import ZabbixAPI
+import sys,re,requests,json,telepot
 
 def get_user_agent(user_agent):
     url = 'http://www.useragentstring.com/?uas='+user_agent+'&getJSON=all'
