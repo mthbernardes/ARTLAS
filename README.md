@@ -14,16 +14,14 @@ pip install -r dependencies.txt
 </pre>
 
 <h3>Configuration</h3>
-<pre>
-Edit the file etc/artlas.conf
+<pre>Edit the file etc/artlas.conf
 <b>Telegram</b>
-<i>
-[Telegram]
+
+<i>[Telegram]
 api = Your Token API
 group_id = Group/User ID that will receive the notifications
-enable = True to send notificantions or False to not send.
-</i>
-</pre>
+enable = True to send notificantions or False to not send.</i></pre>
+
 
 <h3>Telegram Notification</h3>
 <img src="https://raw.githubusercontent.com/mthbernardes/ARTLAS/master/img/notification.png" width="350"/>
