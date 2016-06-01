@@ -1,0 +1,6 @@
+xmltodict
+requests
+telepot
+pygtail
+lxml
+pyzabbix
