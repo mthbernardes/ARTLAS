@@ -25,8 +25,14 @@ enable = True to send notificantions or False to not send.</i>
 <i>[Zabbix]
 username = Zabbix Username
 password = Zabbix Password
-server = http://127.0.0.1/
-enable = True to enable  or False to disable</pre>
+server = http://127.0.0.1/ - Zabbix Server
+enable = True to enable  or False to disable
+
+<b>GENERAL CONFIGURATION</b>
+[Files]
+apache_log = Full path apache access.log
+rules = default_filter.xml <b><i>Do not Change</i></b>
+</pre>
 
 <h3>Telegram Notification</h3>
 <img src="https://raw.githubusercontent.com/mthbernardes/ARTLAS/master/img/notification.png" width="350"/>
