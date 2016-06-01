@@ -82,7 +82,7 @@ if conf['telegram_enable'] == 'True':
 #Check Zabbix enabled
 if conf['zabbix_enable'] == 'True':
     zapi = ZabbixAPI(server)
-    zapi.login(username, password)
+    zapi.login(conf['username'], conf['password'])
     print '[+] - Zabbix Enabled'
 
 rules = json.loads(open(conf['rules']).read())
