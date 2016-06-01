@@ -35,7 +35,7 @@ enable = True to enable  or False to disable
 <b>GENERAL CONFIGURATION</b>
 [Files]
 apache_log = Full path apache access.log
-rules = default_filter.xml It's the file that contains the OWASP filter <b><i>[Do not Change]</i></b>
+rules = default_filter.json It's the file that contains the OWASP filter <b><i>[Do not Change]</i></b>
 </pre>
 
 <h3>Telegram Notification example</h3>
