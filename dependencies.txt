@@ -1,4 +1,3 @@
-xmltodict
 requests
 telepot
 pygtail
