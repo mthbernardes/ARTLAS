@@ -36,7 +36,7 @@ def connections(line):
         resultado = owasp(infos['path'])
         if resultado:
             dados = ipinfos(infos['ip'])
-            msg = '[+] - Intrusion Attempt - [+]\nIP:'+infos['ip']+'\nReverse DNS:'+dados['reverse_dns']+'\nISP:'+dados['isp']+'\nPath:'+infos['path']+'\nUser-Agent:'+get_user_agent(infos['user_agent'])+'\nDescription:'+resultado['description']+'\nImpact:'+resultado['impact']+'\nRegional Information'+'\nCountry:'+dados['locate']+' Region:'+dados['region']+' City:'+dados['city']
+            msg = '[+] - Intrusion Attempt - [+]\nIP:'+infos['ip']+'\nReverse DNS:'+dados['reverse_dns']+'\nISP:'+dados['isp']+'\nPath:'+infos['path']+'\nUser-Agent:'+get_user_agent(infos['user_agent'])+'\nDescription:'+resultado['description']+'\nImpact:'+resultado['impact']+ '\nCategory: '+','.join(resultado['tags']['tag']) +'\nRegional Information'+'\nCountry:'+dados['locate']+' Region:'+dados['region']+' City:'+dados['city']
             if conf['telegram_enable'] == 'True':
                 bot.sendMessage(conf['group_id'], msg)
             print msg
