@@ -14,6 +14,7 @@ git clone https://github.com/mthbernardes/ARTLAS.git
 
 <b>Install dependencies</b>
 pip install -r dependencies.txt
+python version 2.7.11(lastet)
 </pre>
 
 <h3>Configuration</h3>
