@@ -15,8 +15,9 @@ def get_conf():
     conf['password'] = config.get('Zabbix','password')
     conf['server'] = config.get('Zabbix','server')
     conf['zabbix_enable'] = config.get('Zabbix','enable')
-    conf['apache_log'] = config.get('Files','apache_log')
-    conf['rules'] = config.get('Files','rules')
+    conf['apache_log'] = config.get('General','apache_log')
+    conf['rules'] = config.get('General','rules')
+    conf['threads'] = int(config.get('General','threads'))
     return conf
 
 def get_file_rules():
@@ -37,10 +38,10 @@ def connections(line):
         resultado = owasp(infos['path'])
         if resultado:
             dados = ipinfos(infos['ip'])
-            msg = '[+] - Intrusion Attempt - [+]\nDate: '+infos['date']+'\nIP: '+infos['ip']+'\nAS: '+dados['as']+'\nOrganization: '+dados['org']+'\nISP: '+dados['isp']+'\nPath: '+infos['path']+'\nUser-Agent: '+infos['user_agent']+'\nDescription: '+resultado['description']+'\nImpact: '+resultado['impact']+ '\nCategory: '+','.join(resultado['tags']['tag']) +'\nRegional Information'+'\nCountry:'+dados['country']+' Region:'+dados['region']+' City:'+dados['city']
+            msg = '[+] - Intrusion Attempt - [+]\nDate: '+infos['date']+'\nIP: '+infos['ip']+'\nLong: '+dados['longitude']+'\nLag: '+dados['latitude']+'\nPath: '+infos['path']+'\nUser-Agent: '+infos['user_agent']+'\nDescription: '+resultado['description']+'\nImpact: '+resultado['impact']+ '\nCategory: '+','.join(resultado['tags']['tag']) +'\nRegional Information'+'\nCountry:'+dados['country']+' Region:'+dados['region']+' City:'+dados['city']
             if conf['telegram_enable'] == 'True':
-                bot.sendMessage(conf['group_id'], msg)
                 time.sleep(3)
+                bot.sendMessage(conf['group_id'], msg)
             print msg
             print
 
@@ -53,21 +54,23 @@ def owasp(path):
             pass
 
 def ipinfos(address):
-    r = requests.get('http://ip-api.com/json/'+address)
+    r = requests.get('http://freegeoip.net/json/'+address)
     response = r.json()
 
     ip_infos = dict()
-    ip_infos['as'] = response['as']
-    ip_infos['isp'] = response['isp']
-    ip_infos['org'] = response['org']
-    ip_infos['country'] = response['country']
-    ip_infos['region'] = response['region']
+    ip_infos['latitude'] = str(response['latitude'])
+    ip_infos['longitude'] = str(response['longitude'])
+    ip_infos['country'] = response['country_name']
+    ip_infos['region'] = response['region_name']
     ip_infos['city'] = response['city']
 
     return ip_infos
 
 
+print '[+] - Getting configs'
 conf = get_conf()
+print 'Done!\n'
+print '[+] - Getting rules file'
 get_file_rules()
 
 #Check Telegram enabled
@@ -83,8 +86,10 @@ if conf['zabbix_enable'] == 'True':
 
 rules = json.loads(open(conf['rules']).read())
 
+print 'Done!\n'
+print 'Starting...'
 while True:
     for linha in Pygtail(conf['apache_log']):
-        for i in range(20):
+        for i in range(conf['threads']):
             t = Thread(target=connections, args=(linha,))
             t.start()
