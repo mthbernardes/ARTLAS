@@ -38,7 +38,7 @@ def connections(line):
         resultado = owasp(infos['path'])
         if resultado:
             dados = ipinfos(infos['ip'])
-            msg = '[+] - Intrusion Attempt - [+]\nDate: '+infos['date']+'\nIP: '+infos['ip']+'\nReverse DNS: '+dados['reverse_dns']+'\nISP: '+dados['isp']+'\nPath: '+infos['path']+'\nUser-Agent: '+infos['user_agent']+'\nDescription: '+resultado['description']+'\nImpact: '+resultado['impact']+ '\nCategory: '+','.join(resultado['tags']['tag']) +'\nRegional Information'+'\nCountry:'+dados['locate']+' Region:'+dados['region']+' City:'+dados['city']
+            msg = '[+] - Intrusion Attempt - [+]\nDate: '+infos['date']+'\nIP: '+infos['ip']+'\nAS: '+dados['as']+'\nOrganization: '+dados['org']+'\nISP: '+dados['isp']+'\nPath: '+infos['path']+'\nUser-Agent: '+infos['user_agent']+'\nDescription: '+resultado['description']+'\nImpact: '+resultado['impact']+ '\nCategory: '+','.join(resultado['tags']['tag']) +'\nRegional Information'+'\nCountry:'+dados['country']+' Region:'+dados['region']+' City:'+dados['city']
             if conf['telegram_enable'] == 'True':
                 bot.sendMessage(conf['group_id'], msg)
                 time.sleep(3)
@@ -54,26 +54,16 @@ def owasp(path):
             pass
 
 def ipinfos(address):
-    blacklist = list()
-    data = {'ip':address}
-    url = 'http://www.ipvoid.com/'
-    r = requests.post(url,data=data)
-    tree = html.fromstring(r.content)
+    r = requests.get('http://ip-api.com/json/'+address)
+    response = r.json()
+
     ip_infos = dict()
-
-    ip_infos['reverse_dns'] = tree.xpath('//*[@id="left"]/table[1]/tbody/tr[4]/td[2]/text()')[0].strip()
-    ip_infos['isp'] = tree.xpath('//*[@id="left"]/table[1]/tbody/tr[7]/td[2]/text()')[0].strip()
-
-    ip_infos['locate'] = tree.xpath('//*[@id="left"]/table[1]/tbody/tr[9]/td[2]/text()')[0].strip()
-    ip_infos['region'] = tree.xpath('//*[@id="left"]/table[1]/tbody/tr[12]/td[2]/text()')[0].strip()
-    ip_infos['city'] = tree.xpath('//*[@id="left"]/table[1]/tbody/tr[11]/td[2]/text()')[0].strip()
-
-    blacklist_name = tree.xpath('//*[@id="left"]/table[2]/tbody/tr/td[1]/text()')
-    blacklist_status = tree.xpath('//*[@id="left"]/table[2]/tbody/tr/td[2]/img/@title')
-    for x in range(0,len(blacklist_status)):
-        if blacklist_status[x].strip() == 'Detected':
-            blacklist.append({blacklist_name[x].strip():blacklist_status[x].strip()})
-    ip_infos['blacklist'] = blacklist
+    ip_infos['as'] = response['as']
+    ip_infos['isp'] = response['isp']
+    ip_infos['org'] = response['org']
+    ip_infos['country'] = response['country']
+    ip_infos['region'] = response['region']
+    ip_infos['city'] = response['city']
 
     return ip_infos
 
