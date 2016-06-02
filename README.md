@@ -58,3 +58,8 @@ CTRL+A+D
 <pre>
 <img src="https://raw.githubusercontent.com/mthbernardes/ARTLAS/master/img/notification.png" width="350"/>
 </pre>
+
+<h3>TO DO</h3>
+<pre>
+<b>Zabbix Integration</b>
+<pre>
