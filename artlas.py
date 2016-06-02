@@ -19,7 +19,7 @@ def get_conf():
     conf['rules'] = config.get('Files','rules')
     return conf
 
-def get_file_rules:
+def get_file_rules():
     r = requests.get('https://dev.itratos.de/projects/php-ids/repository/raw/trunk/lib/IDS/default_filter.json', verify=False)
     with open('etc/default_filter.json','w') as file_rules:
         file_rules.write(r.content)
