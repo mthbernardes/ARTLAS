@@ -3,12 +3,6 @@ from lxml import html
 from pyzabbix import ZabbixAPI
 import re,requests,json,telepot
 
-def get_user_agent(user_agent):
-    url = 'http://www.useragentstring.com/?uas='+user_agent+'&getJSON=all'
-    r = requests.get(url)
-    user_agent = json.loads(r.content)
-    return user_agent['agent_name']
-
 def get_conf():
     from ConfigParser import ConfigParser
     conf = dict()
@@ -36,7 +30,7 @@ def connections(line):
         resultado = owasp(infos['path'])
         if resultado:
             dados = ipinfos(infos['ip'])
-            msg = '[+] - Intrusion Attempt - [+]\nIP:'+infos['ip']+'\nReverse DNS:'+dados['reverse_dns']+'\nISP:'+dados['isp']+'\nPath:'+infos['path']+'\nUser-Agent:'+get_user_agent(infos['user_agent'])+'\nDescription:'+resultado['description']+'\nImpact:'+resultado['impact']+ '\nCategory: '+','.join(resultado['tags']['tag']) +'\nRegional Information'+'\nCountry:'+dados['locate']+' Region:'+dados['region']+' City:'+dados['city']
+            msg = '[+] - Intrusion Attempt - [+]\nIP:'+infos['ip']+'\nReverse DNS:'+dados['reverse_dns']+'\nISP:'+dados['isp']+'\nPath:'+infos['path']+'\nUser-Agent: '+infos['user_agent']+'\nDescription:'+resultado['description']+'\nImpact:'+resultado['impact']+ '\nCategory: '+','.join(resultado['tags']['tag']) +'\nRegional Information'+'\nCountry:'+dados['locate']+' Region:'+dados['region']+' City:'+dados['city']
             if conf['telegram_enable'] == 'True':
                 bot.sendMessage(conf['group_id'], msg)
             print msg
