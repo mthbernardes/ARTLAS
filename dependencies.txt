@@ -1,5 +1,4 @@
 requests
 telepot
 pygtail
-lxml
 pyzabbix
