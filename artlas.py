@@ -71,6 +71,8 @@ conf = get_conf()
 print 'Done!\n'
 print '[+] - Getting rules file'
 get_file_rules()
+print 'Done!\n'
+print 'Started!\n'
 
 #Check Telegram enabled
 if conf['telegram_enable'] == 'True':
