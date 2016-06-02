@@ -2,6 +2,7 @@ import re,requests,json,telepot,time
 from pygtail import Pygtail
 from lxml import html
 from pyzabbix import ZabbixAPI
+from threading import Thread
 
 def get_conf():
     from ConfigParser import ConfigParser
