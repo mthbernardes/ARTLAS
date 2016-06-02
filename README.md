@@ -42,9 +42,10 @@ server = http://127.0.0.1/ - Zabbix Server
 enable = True to enable  or False to disable
 
 <b>GENERAL CONFIGURATION</b>
-[Files]
+[General]
 apache_log = Full path apache access.log
 rules = default_filter.json It's the file that contains the OWASP filter <b><i>[Do not Change]</i></b>
+threads = Number of threads
 </pre>
 
 <h3>How to start</h3>
