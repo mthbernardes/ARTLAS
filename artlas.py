@@ -86,8 +86,6 @@ if conf['zabbix_enable'] == 'True':
 
 rules = json.loads(open(conf['rules']).read())
 
-print 'Done!\n'
-print 'Starting...'
 while True:
     for linha in Pygtail(conf['apache_log']):
         for i in range(conf['threads']):
