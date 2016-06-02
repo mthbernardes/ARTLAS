@@ -17,7 +17,6 @@ def get_conf():
     conf['zabbix_enable'] = config.get('Zabbix','enable')
     conf['apache_log'] = config.get('General','apache_log')
     conf['rules'] = config.get('General','rules')
-    conf['threads'] = int(config.get('General','threads'))
     return conf
 
 def get_file_rules():
