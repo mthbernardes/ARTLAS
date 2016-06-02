@@ -88,6 +88,5 @@ rules = json.loads(open(conf['rules']).read())
 
 while True:
     for linha in Pygtail(conf['apache_log']):
-        for i in range(conf['threads']):
-            t = Thread(target=connections, args=(linha,))
-            t.start()
+        t = Thread(target=connections, args=(linha,))
+        t.start()
