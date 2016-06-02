@@ -79,6 +79,7 @@ def ipinfos(address):
 
 
 conf = get_conf()
+get_file_rules()
 
 #Check Telegram enabled
 if conf['telegram_enable'] == 'True':
