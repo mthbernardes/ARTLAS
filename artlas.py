@@ -39,7 +39,6 @@ def connections(line):
             dados = ipinfos(infos['ip'])
             msg = '[+] - Intrusion Attempt - [+]\nDate: '+infos['date']+'\nIP: '+infos['ip']+'\nReverse DNS: '+dados['reverse_dns']+'\nISP: '+dados['isp']+'\nPath: '+infos['path']+'\nUser-Agent: '+infos['user_agent']+'\nDescription: '+resultado['description']+'\nImpact: '+resultado['impact']+ '\nCategory: '+','.join(resultado['tags']['tag']) +'\nRegional Information'+'\nCountry:'+dados['locate']+' Region:'+dados['region']+' City:'+dados['city']
             if conf['telegram_enable'] == 'True':
-                #Use thread
                 bot.sendMessage(conf['group_id'], msg)
                 time.sleep(3)
             print msg
