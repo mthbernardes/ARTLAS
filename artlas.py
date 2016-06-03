@@ -36,14 +36,16 @@ def connections(line):
         infos['user_agent'] = line[5]
         resultado = owasp(infos['path'])
         if resultado and infos['status_code'] != '404':
-            dados = ipinfos(infos['ip'])
-            msg = '[+] - Intrusion Attempt - [+]\nDate: '+infos['date']+'\nIP: '+infos['ip']+'\nLong: '+dados['longitude']+'\nLag: '+dados['latitude']+'\nPath: '+infos['path']+'\nUser-Agent: '+infos['user_agent']+'\nDescription: '+resultado['description']+'\nImpact: '+resultado['impact']+ '\nCategory: '+','.join(resultado['tags']['tag']) +'\nRegional Information'+'\nCountry:'+dados['country']+' Region:'+dados['region']+' City:'+dados['city']
-            if conf['telegram_enable'] == 'True':
-                time.sleep(3)
-                bot.sendMessage(conf['group_id'], msg)
-            print msg
-            print
-
+            try:
+                dados = ipinfos(infos['ip'])
+                msg = '[+] - Intrusion Attempt - [+]\nDate: '+infos['date']+'\nIP: '+infos['ip']+'\nLong: '+dados['longitude']+'\nLag: '+dados['latitude']+'\nPath: '+infos['path']+'\nUser-Agent: '+infos['user_agent']+'\nDescription: '+resultado['description']+'\nImpact: '+resultado['impact']+ '\nCategory: '+','.join(resultado['tags']['tag']) +'\nRegional Information'+'\nCountry:'+dados['country']+' Region:'+dados['region']+' City:'+dados['city']
+                if conf['telegram_enable'] == 'True':
+                    time.sleep(3)
+                    bot.sendMessage(conf['group_id'], msg)
+                print msg
+                print
+            except:
+                pass
 def owasp(path):
     for filtro in rules['filters']['filter']:
         try:
