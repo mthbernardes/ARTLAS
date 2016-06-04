@@ -18,9 +18,9 @@ python version 2.7.11(lastet)
 
 <b>Install screen</b>
 sudo apt-get install screen #Debian Like
-sbopkg -i screen    # Slackware 14.* 
+sbopkg -i screen    # Slackware 14.*
 yum install screen # CentOS/RHEL   
-dnf install screeen  # Fedora 
+dnf install screeen  # Fedora
 
 <a href="http://www.nanoshots.com.br/2016/05/screen-dicas-de-administracao-de-varios.html"><i>screen tutorial [pt_Br]</i></a>
 </pre>
@@ -54,12 +54,11 @@ python artlas.py
 CTRL+A+D
 </pre>
 
-<h3>Telegram notification example</h3>
-<pre>
-<img src="https://raw.githubusercontent.com/mthbernardes/ARTLAS/master/img/notification.png" width="350"/>
-</pre>
 
 <h3>TO DO</h3>
 <pre>
 <b>Zabbix Integration</b>
+<b>Nginx</b>
+<b>Apache vHosts</b>
+<b>Nginx vHosts</b>
 <pre>

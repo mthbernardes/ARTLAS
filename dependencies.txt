@@ -2,3 +2,4 @@ requests
 telepot
 pygtail
 pyzabbix
+apache_log_parser

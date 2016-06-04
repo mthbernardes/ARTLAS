@@ -1,4 +1,4 @@
-import re,requests,json,telepot,time
+import re,requests,json,telepot,time,apache_log_parser
 from pygtail import Pygtail
 from pyzabbix import ZabbixAPI
 from threading import Thread
@@ -17,6 +17,7 @@ def get_conf():
     conf['zabbix_enable'] = config.get('Zabbix','enable')
     conf['apache_log'] = config.get('General','apache_log')
     conf['rules'] = config.get('General','rules')
+    conf['apache_mask'] = config.get('General','apache_mask')
     return conf
 
 def get_file_rules():
@@ -25,57 +26,6 @@ def get_file_rules():
         file_rules.write(r.content)
         file_rules.close()
 
-def connections(line):
-        infos = dict()
-        line = line.split('"')
-        infos['ip'] = line[0].split(' ')[0]
-        infos['date'] = line[0].split(' ')[3].replace('[','')
-        infos['method'] = line[1].split(' ')[0]
-        infos['path'] = line[1].split(' ')[1]
-        infos['status_code'] = line[2].split(' ')[1]
-        infos['user_agent'] = line[5]
-        resultado = owasp(infos['path'])
-        if resultado and infos['status_code'] != '404':
-            try:
-                print 'Getting ip information'
-                dados = ipinfos(infos['ip'])
-            except:
-                pass
-                print 'Error'
-            if dados:
-                msg = '[+] - Intrusion Attempt - [+]\nDate: '+infos['date'$
-                if conf['telegram_enable'] == 'True':
-                    #time.sleep(3)
-                    bot.sendMessage(conf['group_id'], msg)
-                print msg
-                print
-
-
-def connections(line):
-        infos = dict()
-        line = line.split('"')
-        infos['ip'] = line[0].split(' ')[0]
-        infos['date'] = line[0].split(' ')[3].replace('[','')
-        infos['method'] = line[1].split(' ')[0]
-        infos['path'] = line[1].split(' ')[1]
-        infos['status_code'] = line[2].split(' ')[1]
-        infos['user_agent'] = line[5]
-        resultado = owasp(infos['path'])
-        if resultado and infos['status_code'] != '404':
-            try:
-                dados = ipinfos(infos['ip'])
-            except:
-                pass
-                print 'Error'
-            if dados:
-                msg = '[+] - Intrusion Attempt - [+]\nDate: '+infos['date']+'\nIP: '+infos['ip']+'\nLong: '+dados['longitude']+'\nLag: '+dados['latitude']+'\nPath: '+infos['path']+'\nUser-Agent: '+infos['user_agent']+'\nDescription: '+resultado['description']+'\nImpact: '+resultado['impact']+ '\nCategory: '+','.join(resultado['tags']['tag']) +'\nRegional Information'+'\nCountry:'+dados['country']+' Region:'+dados['region']+' City:'+dados['city']
-                if conf['telegram_enable'] == 'True':
-                    time.sleep(3)
-                    bot.sendMessage(conf['group_id'], msg)
-                print msg
-                print
-            except:
-                pass
 
 def owasp(path):
     for filtro in rules['filters']['filter']:
@@ -85,27 +35,39 @@ def owasp(path):
         except:
             pass
 
-def ipinfos(address):
-    r = requests.get('http://freegeoip.net/json/'+address)
-    response = r.json()
-
-    ip_infos = dict()
-    ip_infos['latitude'] = str(response['latitude'])
-    ip_infos['longitude'] = str(response['longitude'])
-    ip_infos['country'] = response['country_name']
-    ip_infos['region'] = response['region_name']
-    ip_infos['city'] = response['city']
-
-    return ip_infos
-
+def connections(linha):
+    line_parser = apache_log_parser.make_parser(conf['apache_mask'])
+    log = line_parser(linha)
+    log['owasp'] = owasp(log['request_url'])
+    if log['owasp']:
+        msg ='''[+] - Intrusion Attempt - [+]
+Date: %s
+IP: %s
+Path: %s
+User-Agent: %s
+Browser: %s
+S.O: %s
+Description: %s
+Impact: %s
+Category: %s''' %(log['time_received'],log['remote_host'],log['request_url'],
+        log['request_header_user_agent'],log['request_header_user_agent__browser__family']+' '+log['request_header_user_agent__browser__version_string'],
+        log['request_header_user_agent__os__family'],log['owasp']['description'],
+        log['owasp']['impact'],','.join(log['owasp']['tags']['tag']))
+        print msg
+        print
+        if conf['telegram_enable'] == 'True':
+            time.sleep(3)
+            bot.sendMessage(conf['group_id'], msg)
 
 print '[+] - Getting configs'
 conf = get_conf()
 print 'Done!\n'
+
 print '[+] - Getting rules file'
 get_file_rules()
 print 'Done!\n'
-print 'Started!\n'
+
+print 'A.R.T.L.A.S Started!\n'
 
 #Check Telegram enabled
 if conf['telegram_enable'] == 'True':
