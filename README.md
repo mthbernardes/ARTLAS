@@ -56,7 +56,7 @@ CTRL+A+D
 </pre>
 
 
-<h3>TO DO</h3>
+<h3>To Do</h3>
 <pre>
 <b>Zabbix Integration</b>
 <b>Nginx</b>
