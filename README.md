@@ -36,15 +36,15 @@ enable = True to send notificantions or False to not send.</i>
 
 <b><font color="red">**ZABBIX INTEGRATION NOT WORKING YET**</font></b>
 <i>[Zabbix]
-username = Zabbix Username
-password = Zabbix Password
-server = http://127.0.0.1/ - Zabbix Server
+serve_name = hostname of the server in zabbix
+agentd_config = Zabbix agent configuration file
 enable = True to enable  or False to disable
 
 <b>GENERAL CONFIGURATION</b>
 [General]
 apache_log = Full path apache access.log
 apache_mask = Mask to identify the fields in the apache access log
+vhost_enable = True to enable  or False to disable vhosts
 rules = etc/default_filter.json It's the file that contains the OWASP filter <b><i>[Do not Change]</i></b>
 </pre>
 
@@ -56,10 +56,8 @@ CTRL+A+D
 </pre>
 
 
-<h3>To Do</h3>
+<h3>Team</h3>
 <pre>
-<b>Zabbix Integration</b>
-<b>Nginx</b>
-<b>Apache vHosts</b>
-<b>Nginx vHosts</b>
+<b>Matheus Bernardes a.k.a. G4mbler</b>
+<b>André Déo</b>
 </pre>
