@@ -1,5 +1,5 @@
 requests
 telepot
 pygtail
-pyzabbix
+py-zabbix
 apache_log_parser
