@@ -11,7 +11,7 @@ def get_conf():
     conf['api'] = config.get('Telegram','api')
     conf['group_id'] = int(config.get('Telegram','group_id'))
     conf['telegram_enable'] = config.get('Telegram','enable')
-    conf['serve_name'] = config.get('Zabbix','server_name')
+    conf['server_name'] = config.get('Zabbix','server_name')
     conf['agentd_config'] = config.get('Zabbix','agentd_config')
     conf['zabbix_enable'] = config.get('Zabbix','enable')
     conf['apache_log'] = config.get('General','apache_log')
@@ -36,9 +36,9 @@ def owasp(path):
             pass
 
 def send_zabbix(msg):
-    metrics = [ZabbixMetric(conf['serve_name'], 'artlas_check', 'OK')]
+    metrics = [ZabbixMetric(conf['server_name'], 'artlas_check', 'OK')]
     ZabbixSender(use_config=conf['agentd_config']).send(metrics)
-    metrics = [ZabbixMetric(conf['serve_name'], 'artlas_check', msg)]
+    metrics = [ZabbixMetric(conf['server_name'], 'artlas_check', msg)]
     ZabbixSender(use_config=conf['agentd_config']).send(metrics)
 
 def connections(linha):
