@@ -36,8 +36,6 @@ def owasp(path):
             pass
 
 def send_zabbix(msg):
-    metrics = [ZabbixMetric(conf['server_name'], 'artlas_check', 'OK')]
-    ZabbixSender(use_config=conf['agentd_config']).send(metrics)
     metrics = [ZabbixMetric(conf['server_name'], 'artlas_check', msg)]
     ZabbixSender(use_config=conf['agentd_config']).send(metrics)
 
