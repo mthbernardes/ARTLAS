@@ -7,6 +7,15 @@ Real time  Apache log analyzer, based on top 10 OWASP vulnerabilities, identifie
 ARTLAS uses the regular expression from the PHP-IDS project, to identify the attempts of exploration, download link to the latest version of the file
 <a href="https://dev.itratos.de/projects/php-ids/repository/raw/trunk/lib/IDS/default_filter.json">Download File</a>
 </p>
+
+<h3>Supported web servers</h3>
+<pre>
+<b>Apache</b>
+<b>Apache vHost</b>
+<b>Nginx</b>
+<b>Nginx vHost</b>
+</pre>
+
 <h3>Installation</h3>
 <pre>
 <b>Clone project</b>
