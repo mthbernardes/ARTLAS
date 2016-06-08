@@ -1,7 +1,7 @@
 <h1>ARTLAS Apache Real Time Logs Analyzer System</h1>
 
 <p>
-Real time  Apache log analyzer, based on top 10 OWASP vulnerabilities, identifies attempts of exploration in your web application, and notify you or your incident team on Telegram.
+Real time  Apache log analyzer, based on top 10 OWASP vulnerabilities, identifies attempts of exploration in your web application, and notify you or your incident team on Telegram, Zabbix and Syslog/SIEM.
 </p>
 <p>
 ARTLAS uses the regular expression from the PHP-IDS project, to identify the attempts of exploration, download link to the latest version of the file
@@ -68,5 +68,6 @@ CTRL+A+D
 <h3>Team</h3>
 <pre>
 <b>Matheus Bernardes a.k.a. G4mbler</b>
+<b>Henrique Gonçalves a.k.a. Kamus Hadenes</b>
 <b>André Déo</b>
 </pre>
