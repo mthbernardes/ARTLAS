@@ -80,7 +80,6 @@ class ARTLAS(object):
                 if re.search(filtro['rule'], path):
                     return filtro
             except:
-                traceback.print_exc()
                 continue
 
     def send_zabbix(self, log):
@@ -131,25 +130,35 @@ class ARTLAS(object):
 
 
     def connections(self, linha):
-        line_parser = apache_log_parser.make_parser(self.conf['apache_mask'])
-        log = line_parser(linha)
-        if self.conf['vhost_enable'] == 'True':
-            log['vhost'] = linha.split(' ')[0]
-        else:
-            log['vhost'] = None
-        log['owasp'] = self.owasp(log['request_url'])
-        if log['owasp']:
-            log['cef_date'] = log['time_received_datetimeobj'].strftime('%b %d %Y %H:%M:%S')
-            self.send_all(log)
+        try:
+            line_parser = apache_log_parser.make_parser(self.conf['apache_mask'])
+            log = line_parser(linha)
+            if self.conf['vhost_enable'] == 'True':
+                log['vhost'] = linha.split(' ')[0]
+            else:
+                log['vhost'] = None
+            log['owasp'] = self.owasp(log['request_url'])
+            if log['owasp']:
+                log['cef_date'] = log['time_received_datetimeobj'].strftime('%b %d %Y %H:%M:%S')
+                self.send_all(log)
+        except:
+            pass
 
 
     def run(self):
         while True:
-            for linha in Pygtail(self.conf['apache_log']):
-                t = Thread(target=self.connections, args=(linha,))
-                t.start()
-            # Prevent processing overflow
-            sleep(0.01)
+            try:
+                for linha in Pygtail(self.conf['apache_log']):
+                    t = Thread(target=self.connections, args=(linha,))
+                    t.start()
+                # Prevent processing overflow
+            except IOError:
+                print('[-] Log not found: {}, waiting...'.format(self.conf['apache_log']))
+                sleep(5)
+            except:
+                pass
+            finally:
+                sleep(0.01)
 
 
 if __name__ == '__main__':
