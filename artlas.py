@@ -49,19 +49,16 @@ def connections(linha):
     log['owasp'] = owasp(log['request_url'])
     if log['owasp']:
         msg ='''[+] - Intrusion Attempt - [+]
-Date: %s
-Vhost: %s
-IP: %s
-Path: %s
-User-Agent: %s
-Browser: %s
-S.O: %s
-Description: %s
-Impact: %s
-Category: %s''' %(log['time_received'],log['vhost'],log['remote_host'],log['request_url'],
-        log['request_header_user_agent'],log['request_header_user_agent__browser__family']+' '+log['request_header_user_agent__browser__version_string'],
-        log['request_header_user_agent__os__family'],log['owasp']['description'],
-        log['owasp']['impact'],','.join(log['owasp']['tags']['tag']))
+Date: {time_received}
+Vhost: {vhost}
+IP: {remote_host}
+Path: {request_url}
+User-Agent: {request_header_user_agent}
+Browser: {request_header_user_agent__browser__family} {request_header_user_agent__browser__version_string}
+S.O: {request_header_user_agent__os__family}
+Description: {owasp_description}
+Impact: {owasp_impact}
+Category: {owasp_category}'''.format(owasp_description=log['owasp']['description'], owasp_impact=log['owasp']['impact'], owasp_category=','.join(log['owasp']['tags']['tag']), **log)
         print msg
         print
         if conf['zabbix_enable'] == 'True':
