@@ -1,5 +1,0 @@
-requests
-telepot
-pygtail
-py-zabbix
-apache_log_parser
