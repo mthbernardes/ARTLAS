@@ -1,4 +1,4 @@
-import syslog
+import syslog_client as syslog
 import re
 import requests
 import json
