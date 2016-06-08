@@ -122,7 +122,7 @@ class ARTLAS(object):
 
     def cef_format(self, log):
 
-            msg = 'CEF:0|mthbernardes|ARTLAS|1.0|INTRUSION_ATTEMPT|Intrusion Attempt|{owasp_impact}|end={cef_date} cs1={vhost} cs1Label=Vhost src={remote_host}\
+            msg = 'CEF:0|ARTLAS|ARTLAS|1.0|INTRUSION_ATTEMPT|Intrusion Attempt|{owasp_impact}|end={cef_date} cs1={vhost} cs1Label=Vhost src={remote_host}\
  request={request_url} requestClientApplication="{request_header_user_agent__browser__family} {request_header_user_agent__os__family} {request_header_user_agent__browser__version_string}"\
  message={owasp_description} cs2={owasp_category} cs2Label=Category'.format(owasp_description=log['owasp']['description'], owasp_impact=log['owasp']['impact'], owasp_category=','.join(log['owasp']['tags']['tag']), **log)
 
