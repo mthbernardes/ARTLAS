@@ -9,8 +9,6 @@ from pygtail import Pygtail
 from threading import Thread
 from pyzabbix import ZabbixMetric, ZabbixSender
 from ConfigParser import ConfigParser
-import traceback
-
 
 class ARTLAS(object):
 
