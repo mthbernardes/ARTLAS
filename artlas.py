@@ -18,19 +18,19 @@ class ARTLAS(object):
         self.conf = dict()
         self.get_conf(config_file)
         print('[+] Done!\n')
-        
+
         # Check if CEF_Syslog is enabled
         if self.conf['cef_syslog_enable']:
             self.syslog = syslog.Syslog(self.conf['cef_syslog_server'])
 
         # Check if Telegram is enabled
-        if self.conf['telegram_enable'] == 'True':
+        if self.conf['telegram_enable']:
             self.bot = telepot.Bot(self.conf['api'])
-    
+
         print('[*] Getting rules...')
         self.get_file_rules()
         print('[+] Done!\n')
-        
+
         self.rules = json.loads(open(self.conf['rules']).read())
 
         # List of all senders, enabled or not
@@ -52,6 +52,7 @@ class ARTLAS(object):
         # Zabbix
         self.conf['server_name'] = config.get('Zabbix','server_name')
         self.conf['agentd_config'] = config.get('Zabbix','agentd_config')
+        self.conf['zabbix_advantage_keys'] = config.getboolean('Zabbix','enable_advantage_keys')
         self.conf['zabbix_enable'] = config.getboolean('Zabbix','enable')
 
         # Apache
@@ -81,10 +82,12 @@ class ARTLAS(object):
                 continue
 
     def send_zabbix(self, log):
-        if self.conf['zabbix_enable']:
-            msg = self.verbose_format(log)
-            metrics = [ZabbixMetric(self.conf['server_name'], 'artlas_check', msg)]
-            ZabbixSender(use_config=self.conf['agentd_config']).send(metrics)
+        if self.conf['zabbix_advantage_keys']:
+		impact = int(log['owasp']['impact'])
+		allowed_range = range(1,8)
+		metrics = [ZabbixMetric(self.conf['server_name'], 'artlas_check{}'.format('_{}'.format(impact) if impact in allowed_range else ''), msg)]
+
+		ZabbixSender(use_config=self.conf['agentd_config']).send(metrics)
 
 
     def send_cef_syslog(self, log):
@@ -131,7 +134,7 @@ class ARTLAS(object):
         try:
             line_parser = apache_log_parser.make_parser(self.conf['apache_mask'])
             log = line_parser(linha)
-            if self.conf['vhost_enable'] == 'True':
+            if self.conf['vhost_enable']:
                 log['vhost'] = linha.split(' ')[0]
             else:
                 log['vhost'] = None
