@@ -21,11 +21,18 @@ class ARTLAS(object):
 
         # Check if CEF_Syslog is enabled
         if self.conf['cef_syslog_enable']:
+            print '[+] Syslog Enabled'
             self.syslog = syslog.Syslog(self.conf['cef_syslog_server'])
 
         # Check if Telegram is enabled
         if self.conf['telegram_enable']:
+            print '[+] Telegram Enabled'
             self.bot = telepot.Bot(self.conf['api'])
+
+        # Check if Zabbix is enabled
+        if self.conf['zabbix_enable']:
+            print '[+] Zabbix Enabled'
+        print 
 
         print('[*] Getting rules...')
         self.get_file_rules()
