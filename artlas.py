@@ -86,7 +86,7 @@ class ARTLAS(object):
         	msg = self.verbose_format(log)
 		impact = int(log['owasp']['impact'])
 		allowed_range = range(1,8)
-		metrics = [ZabbixMetric(self.conf['server_name'], 'artlas_check{}'.format('_{}'.format(impact) if impact in allowed_range else ''), msg)]
+		metrics = [ZabbixMetric(self.conf['server_name'], 'artlas_check{}'.format('_0{}'.format(impact) if impact in allowed_range else ''), msg)]
 
 		ZabbixSender(use_config=self.conf['agentd_config']).send(metrics)
 
