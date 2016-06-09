@@ -51,10 +51,11 @@ api = Your Token API
 group_id = Group/User ID that will receive the notifications
 enable = True to send notificantions or False to not send.</i>
 
-<b><font color="red">**ZABBIX INTEGRATION NOT WORKING YET**</font></b>
-<i>[Zabbix]
-serve_name = hostname of the server in zabbix
+<b>ZABBIX CONFIGURATION</b>
+<i>[Zabbix]</i>
+server_name = hostname of the server in zabbix
 agentd_config = Zabbix agent configuration file
+enable_advantage_keys = True or False to use advanced triggers
 enable = True to enable  or False to disable
 
 <b>GENERAL CONFIGURATION</b>
@@ -63,6 +64,11 @@ apache_log = Full path apache access.log
 apache_mask = Mask to identify the fields in the apache access log
 vhost_enable = True to enable  or False to disable vhosts
 rules = etc/default_filter.json It's the file that contains the OWASP filter <b><i>[Do not Change]</i></b>
+
+<b>SYSLOG/SIEM CONFIGURATION</b>
+[CEF_Syslog]
+server_name = IP or Hostname SySlog/SIEM server
+enable = True or False to enable
 </pre>
 
 <h3>How to start</h3>
@@ -71,7 +77,6 @@ screen -S artlas
 python artlas.py
 CTRL+A+D
 </pre>
-
 
 <h3>Team</h3>
 <pre>
