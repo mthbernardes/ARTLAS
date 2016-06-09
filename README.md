@@ -82,6 +82,6 @@ CTRL+A+D
 <h3>Team</h3>
 <pre>
 <b>Matheus Bernardes a.k.a. G4mbler</b>
-<b>Henrique Gonçalves a.k.a. Kamus Hadenes</b>
+<b>Henrique Gonçalves a.k.a. <a href="https://github.com/kamushadenes">Kamus Hadenes</a></b>
 <b>André Déo</b>
 </pre>
