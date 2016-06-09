@@ -58,6 +58,11 @@ agentd_config = Zabbix agent configuration file
 enable_advantage_keys = True or False to use advanced triggers
 enable = True to enable  or False to disable
 
+<b>SYSLOG/SIEM CONFIGURATION</b>
+[CEF_Syslog]
+server_name = IP or Hostname SySlog/SIEM server
+enable = True or False to enable
+
 <b>GENERAL CONFIGURATION</b>
 [General]
 apache_log = Full path apache access.log
@@ -65,10 +70,6 @@ apache_mask = Mask to identify the fields in the apache access log
 vhost_enable = True to enable  or False to disable vhosts
 rules = etc/default_filter.json It's the file that contains the OWASP filter <b><i>[Do not Change]</i></b>
 
-<b>SYSLOG/SIEM CONFIGURATION</b>
-[CEF_Syslog]
-server_name = IP or Hostname SySlog/SIEM server
-enable = True or False to enable
 </pre>
 
 <h3>How to start</h3>
