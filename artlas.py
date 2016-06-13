@@ -60,6 +60,7 @@ class ARTLAS(object):
         self.conf['server_name'] = config.get('Zabbix','server_name')
         self.conf['agentd_config'] = config.get('Zabbix','agentd_config')
         self.conf['zabbix_advantage_keys'] = config.getboolean('Zabbix','enable_advantage_keys')
+        self.conf['notifications'] = config.getboolean('Zabbix','notifications')
         self.conf['zabbix_enable'] = config.getboolean('Zabbix','enable')
 
         # Apache
@@ -95,8 +96,9 @@ class ARTLAS(object):
 		allowed_range = range(1,8)
 		metrics = [ZabbixMetric(self.conf['server_name'], 'artlas_check{}'.format('_0{}'.format(impact) if impact in allowed_range else ''), msg)]
 		ZabbixSender(use_config=self.conf['agentd_config']).send(metrics)
-		metrics = [ZabbixMetric(self.conf['server_name'], 'artlas_check{}'.format('_0{}'.format(impact) if impact in allowed_range else ''), "OK")]
-		ZabbixSender(use_config=self.conf['agentd_config']).send(metrics)
+		if self.conf['notifications']
+			metrics = [ZabbixMetric(self.conf['server_name'], 'artlas_check{}'.format('_0{}'.format(impact) if impact in allowed_range else ''), "OK")]
+			ZabbixSender(use_config=self.conf['agentd_config']).send(metrics)
 
 
     def send_cef_syslog(self, log):
