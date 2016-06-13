@@ -56,7 +56,8 @@ enable = True to send notificantions or False to not send.</i>
 server_name = hostname of the server in zabbix
 agentd_config = Zabbix agent configuration file
 enable_advantage_keys = True or False to use advanced triggers
-enable = True to enable  or False to disable
+notifications = true to enable  or false to disable triggers notifications
+enable = true to enable  or false to disable
 
 <b>SYSLOG/SIEM CONFIGURATION</b>
 [CEF_Syslog]
