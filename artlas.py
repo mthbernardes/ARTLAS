@@ -101,8 +101,12 @@ class ARTLAS(object):
 		else:
 			metrics = [ZabbixMetric(self.conf['server_name'], 'artlas_check',msg)]
 		ZabbixSender(use_config=self.conf['agentd_config']).send(metrics)
+
 		if self.conf['notifications']:
-			metrics = [ZabbixMetric(self.conf['server_name'], 'artlas_check{}'.format('_0{}'.format(impact) if impact in allowed_range else ''), "OK")]
+			if self.conf['zabbix_advantage_keys']:
+				metrics = [ZabbixMetric(self.conf['server_name'], 'artlas_check{}'.format('_0{}'.format(impact) if impact in allowed_range e$
+			else:
+				metrics = [ZabbixMetric(self.conf['server_name'], 'artlas_check',"OK")]
 			ZabbixSender(use_config=self.conf['agentd_config']).send(metrics)
 
     def send_cef_syslog(self, log):
