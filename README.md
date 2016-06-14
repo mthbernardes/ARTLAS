@@ -8,6 +8,17 @@ ARTLAS uses the regular expression from the PHP-IDS project, to identify the att
 <a href="https://dev.itratos.de/projects/php-ids/repository/raw/trunk/lib/IDS/default_filter.json">Download File</a>
 </p>
 
+<h3>ChangeLog</h3>
+<pre>
+-Added CEF for syslog and SIEM
+-Added option to connect in syslog servers or SIEM’s
+-Added Zabbix integration with differents triggers
+-Code review added class structure
+-Added vhost capability
+-Added verbose outup enabled
+-Zabbix Notifications bugs fixed
+</pre>
+
 <h3>Supported Output</h3>
 <pre>
 <b>Zabbix</b>
