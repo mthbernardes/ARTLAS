@@ -21,7 +21,7 @@ ARTLAS uses the regular expression from the PHP-IDS project, to identify the att
 
 <h3>Supported Output</h3>
 <pre>
-<b>Zabbix</b>
+<b>Zabbix Version 2.4 and 3.0</b>
 <b>SySlog</b>
 <b>SIEM</b>
 <b>Telegram</b>
