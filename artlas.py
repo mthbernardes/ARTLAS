@@ -91,24 +91,25 @@ class ARTLAS(object):
             except:
                 continue
 
-    def send_zabbix(self, log):
-	if self.conf['zabbix_enable']:
-        	msg = self.verbose_format(log)
-	        if self.conf['zabbix_advantage_keys']:
+	def send_zabbix(self, log):
+		if self.conf['zabbix_enable']:
+			msg = self.verbose_format(log)
 			impact = int(log['owasp']['impact'])
 			allowed_range = range(1,8)
-			metrics = [ZabbixMetric(self.conf['server_name'], 'artlas_check{}'.format('_0{}'.format(impact) if impact in allowed_range else ''), msg)]
-		else:
-			metrics = [ZabbixMetric(self.conf['server_name'], 'artlas_check',msg)]
-		ZabbixSender(use_config=self.conf['agentd_config']).send(metrics)
-
-		if self.conf['notifications']:
+		
 			if self.conf['zabbix_advantage_keys']:
 				metrics = [ZabbixMetric(self.conf['server_name'], 'artlas_check{}'.format('_0{}'.format(impact) if impact in allowed_range else ''), msg)]
 			else:
-				metrics = [ZabbixMetric(self.conf['server_name'], 'artlas_check',"OK")]
+				metrics = [ZabbixMetric(self.conf['server_name'], 'artlas_check',msg)]
 			ZabbixSender(use_config=self.conf['agentd_config']).send(metrics)
-
+		
+			if self.conf['notifications']:
+				if self.conf['zabbix_advantage_keys']:
+					metrics = [ZabbixMetric(self.conf['server_name'], 'artlas_check{}'.format('_0{}'.format(impact) if impact in allowed_range else ''), msg)]
+				else:
+					metrics = [ZabbixMetric(self.conf['server_name'], 'artlas_check',"OK")]
+				ZabbixSender(use_config=self.conf['agentd_config']).send(metrics)
+				
     def send_cef_syslog(self, log):
         if self.conf['cef_syslog_enable']:
             msg = self.cef_format(log)
