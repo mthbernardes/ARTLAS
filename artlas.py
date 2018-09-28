@@ -29,6 +29,10 @@ class ARTLAS(object):
 			print '[+] Telegram Enabled'
 			self.bot = telepot.Bot(self.conf['api'])
 
+		# Check if Slack is enabled
+		if self.conf['slack_enable']:
+			print '[+] Slack Enabled'
+
 		# Check if Zabbix is enabled
 		if self.conf['zabbix_enable']:
 			print '[+] Zabbix Enabled'
@@ -43,7 +47,7 @@ class ARTLAS(object):
 		self.rules = json.loads(open(self.conf['rules']).read())
 
 		# List of all senders, enabled or not
-		self.senders = [self.send_zabbix, self.send_cef_syslog, self.send_telegram]
+		self.senders = [self.send_zabbix, self.send_cef_syslog,self.send_telegram, self.send_slack]
 
 
 		print('[*] A.R.T.L.A.S Started!\n')
@@ -58,6 +62,10 @@ class ARTLAS(object):
 		# One should use getboolean to fetch boolean values, otherwise they will always be True unless empty
 		self.conf['telegram_enable'] = config.getboolean('Telegram','enable')
 
+		# Slack
+		self.conf['link_webhook'] = config.get('Slack', 'link_webhook')
+		self.conf['slack_enable'] = config.getboolean('Slack', 'enable')
+
 		# Zabbix
 		self.conf['server_name'] = config.get('Zabbix','server_name')
 		self.conf['agentd_config'] = config.get('Zabbix','agentd_config')
@@ -66,10 +74,10 @@ class ARTLAS(object):
 		self.conf['zabbix_enable'] = config.getboolean('Zabbix','enable')
 
 		# Apache
-		self.conf['apache_log'] = config.get('General','apache_log')
-		self.conf['rules'] = config.get('General','rules')
-		self.conf['apache_mask'] = config.get('General','apache_mask')
-		self.conf['vhost_enable'] = config.getboolean('General','vhost_enable')
+		self.conf['apache_log'] = config.get('General', 'apache_log')
+		self.conf['rules'] = config.get('General', 'rules')
+		self.conf['apache_mask'] = config.get('General', 'apache_mask')
+		self.conf['vhost_enable'] = config.getboolean('General', 'vhost_enable')
 
 		# CEF_Syslog
 		self.conf['cef_syslog_enable'] = config.getboolean('CEF_Syslog','enable')
@@ -78,7 +86,7 @@ class ARTLAS(object):
 		return self.conf
 
 	def get_file_rules(self):
-		r = requests.get('http://dev.itratos.de/projects/php-ids/repository/raw/trunk/lib/IDS/default_filter.json')
+		r = requests.get('https://raw.githubusercontent.com/PHPIDS/PHPIDS/master/lib/IDS/default_filter.json')
 		with open('etc/default_filter.json','w') as file_rules:
 			file_rules.write(r.content)
 			file_rules.close()
@@ -120,6 +128,12 @@ class ARTLAS(object):
 			msg = self.verbose_format(log)
 			sleep(3)
 			self.bot.sendMessage(self.conf['group_id'], msg)
+
+	def send_slack(self, log):
+		if self.conf['slack_enable']:
+			msg = self.verbose_format(log)
+			sleep(3)
+			requests.post(self.conf['link_webhook'], headers={'Content-type': 'application/json'}, data='{{"text":"```{}```"}}'.format(msg))
 
 	def send_all(self, log):
 		print(self.verbose_format(log))
