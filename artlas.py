@@ -45,6 +45,7 @@ class ARTLAS(object):
 		print('[+] Done!\n')
 
 		self.rules = json.loads(open(self.conf['rules']).read())
+		self.white_rules = open(self.conf['whitelist']).read().strip().split(',')
 
 		# List of all senders, enabled or not
 		self.senders = [self.send_zabbix, self.send_cef_syslog,self.send_telegram, self.send_slack]
@@ -76,6 +77,7 @@ class ARTLAS(object):
 		# Apache
 		self.conf['apache_log'] = config.get('General', 'apache_log')
 		self.conf['rules'] = config.get('General', 'rules')
+		self.conf['whitelist'] = config.get('General', 'whitelist')
 		self.conf['apache_mask'] = config.get('General', 'apache_mask')
 		self.conf['vhost_enable'] = config.getboolean('General', 'vhost_enable')
 
@@ -93,6 +95,8 @@ class ARTLAS(object):
 
 	def owasp(self, path):
 		for filtro in self.rules['filters']['filter']:
+			if filtro['id'] in self.white_rules:
+				continue
 			try:
 				if re.search(filtro['rule'], path):
 					return filtro
@@ -151,8 +155,9 @@ class ARTLAS(object):
 	Browser: {request_header_user_agent__browser__family} {request_header_user_agent__browser__version_string}
 	S.O: {request_header_user_agent__os__family}
 	Description: {owasp_description}
+	Rule ID: {rule_id}
 	Impact: {owasp_impact}
-	Category: {owasp_category}'''.format(owasp_description=log['owasp']['description'], owasp_impact=log['owasp']['impact'], owasp_category=','.join(log['owasp']['tags']['tag']), **log)
+	Category: {owasp_category}'''.format(rule_id=log['owasp']['id'], owasp_description=log['owasp']['description'], owasp_impact=log['owasp']['impact'], owasp_category=','.join(log['owasp']['tags']['tag']), **log)
 			return msg
 
 	def cef_format(self, log):
