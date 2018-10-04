@@ -155,6 +155,7 @@ class ARTLAS(object):
 	Browser: {request_header_user_agent__browser__family} {request_header_user_agent__browser__version_string}
 	S.O: {request_header_user_agent__os__family}
 	Description: {owasp_description}
+	Status Code: {status}
 	Rule ID: {rule_id}
 	Impact: {owasp_impact}
 	Category: {owasp_category}'''.format(rule_id=log['owasp']['id'], owasp_description=log['owasp']['description'], owasp_impact=log['owasp']['impact'], owasp_category=','.join(log['owasp']['tags']['tag']), **log)
