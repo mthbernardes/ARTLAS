@@ -5,5 +5,5 @@ requests==2.10.0
 six==1.10.0
 telepot==8.1
 ua-parser==0.7.1
-urllib3==1.15.1
+urllib3==1.24.2
 user-agents==1.0.1
