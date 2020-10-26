@@ -313,7 +313,7 @@ class ARTLAS(object):
 	def run(self):
 		try:
 			first=True
-			query="service:pagarme-api status:warn"
+			query="service:* status:warn"
 			while True:
 				last_2=""
 				if first:
