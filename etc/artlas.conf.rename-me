@@ -21,3 +21,9 @@ apache_log = /var/log/apache2/access.log
 apache_mask = %h - - %t "%r" %>s %b "%{Referer}i" "%{User-Agent}i"
 vhost_enable = false
 rules = etc/default_filter.json
+#Comma-separated IDs
+whitelist = etc/whitelist.txt 
+
+[Slack]
+link_webhook = https://hooks.slack.com/services/XXXXXX/XXXXXXXXX
+enable = true

@@ -1,14 +1,23 @@
+# -*- coding: utf-8 -*-
 import syslog_client as syslog
 import re
 import requests
 import json
+import sys
 import telepot
-from time import sleep
+import subprocess
+import shlex
+import os
 import apache_log_parser
+from time import sleep
 from pygtail import Pygtail
 from threading import Thread
 from pyzabbix import ZabbixMetric, ZabbixSender
-from ConfigParser import ConfigParser
+from datetime import datetime, timezone, timedelta
+try:
+	from ConfigParser import ConfigParser
+except:
+	from configparser import ConfigParser
 
 class ARTLAS(object):
 
@@ -21,24 +30,24 @@ class ARTLAS(object):
 
 		# Check if CEF_Syslog is enabled
 		if self.conf['cef_syslog_enable']:
-			print '[+] Syslog Enabled'
+			print('[+] Syslog Enabled')
 			self.syslog = syslog.Syslog(self.conf['cef_syslog_server'])
 
 		# Check if Telegram is enabled
 		if self.conf['telegram_enable']:
-			print '[+] Telegram Enabled'
+			print('[+] Telegram Enabled')
 			self.bot = telepot.Bot(self.conf['api'])
 
 		# Check if Slack is enabled
 		if self.conf['slack_enable']:
-			print '[+] Slack Enabled'
+			print('[+] Slack Enabled')
 
 		# Check if Zabbix is enabled
 		if self.conf['zabbix_enable']:
-			print '[+] Zabbix Enabled'
-			print 'Notifications ',self.conf['notifications']
-			print 'Advanced ',self.conf['zabbix_advantage_keys']
-		print 
+			print('[+] Zabbix Enabled')
+			print('Notifications ',self.conf['notifications'])
+			print('Advanced ',self.conf['zabbix_advantage_keys'])
+		print() 
 
 		print('[*] Getting rules...')
 		self.get_file_rules()
@@ -90,7 +99,7 @@ class ARTLAS(object):
 	def get_file_rules(self):
 		r = requests.get('https://raw.githubusercontent.com/PHPIDS/PHPIDS/master/lib/IDS/default_filter.json')
 		with open('etc/default_filter.json','w') as file_rules:
-			file_rules.write(r.content)
+			file_rules.write(r.text)
 			file_rules.close()
 
 	def owasp(self, path):
@@ -152,20 +161,17 @@ class ARTLAS(object):
 	IP: {remote_host}
 	Path: {request_url}
 	User-Agent: {request_header_user_agent}
-	Browser: {request_header_user_agent__browser__family} {request_header_user_agent__browser__version_string}
-	S.O: {request_header_user_agent__os__family}
 	Description: {owasp_description}
 	Status Code: {status}
 	Rule ID: {rule_id}
 	Impact: {owasp_impact}
-	Category: {owasp_category}'''.format(rule_id=log['owasp']['id'], owasp_description=log['owasp']['description'], owasp_impact=log['owasp']['impact'], owasp_category=','.join(log['owasp']['tags']['tag']), **log)
+	Category: {owasp_category}'''.format(rule_id=log['owasp']['id'], owasp_description=log['owasp']['description'], owasp_impact=log['owasp']['impact'], owasp_category=','.join(log['owasp']['tags']['tag']),cef_date=log['timestamp'],vhost=log['hostname'],remote_host=log['headers']['x-requester-id'],request_url=log['url'],request_header_user_agent=log['user-agent'],status=log['statusCode'])
 			return msg
 
 	def cef_format(self, log):
 
-			msg = 'CEF:0|ARTLAS|ARTLAS|1.0|INTRUSION_ATTEMPT|Intrusion Attempt|{owasp_impact}|end={cef_date} cs1={vhost} cs1Label=Vhost src={remote_host}\
- request={request_url} requestClientApplication="{request_header_user_agent__browser__family} {request_header_user_agent__os__family} {request_header_user_agent__browser__version_string}"\
- message={owasp_description} cs2={owasp_category} cs2Label=Category'.format(owasp_description=log['owasp']['description'], owasp_impact=log['owasp']['impact'], owasp_category=','.join(log['owasp']['tags']['tag']), **log)
+			msg = 'CEF:0|ARTLAS|ARTLAS|1.0|INTRUSION_ATTEMPT|Intrusion Attempt|{owasp_impact}|end={cef_date} cs1={vhost} cs1Label=Vhost src={remote_host}\=request={request_url} requestClientApplication="{request_header_user_agent__browser__family} {request_header_user_agent__os__family} {request_header_user_agent__browser__version_string}"\
+ message={owasp_description} cs2={owasp_category} cs2Label=Category'.format(owasp_description=log['owasp']['description'], owasp_impact=log['owasp']['impact'], owasp_category=','.join(log['owasp']['tags']['tag']),cef_date=log['timestamp'],vhost=log['hostname'],remote_host=log['headers']['x-requester-id'],request_url=log['url'],request_header_user_agent=log['user-agent'],status=log['statusCode'])
 
 			return msg
 
@@ -180,26 +186,49 @@ class ARTLAS(object):
 				log['vhost'] = None
 			log['owasp'] = self.owasp(log['request_url'])
 			if log['owasp']:
-				log['cef_date'] = log['time_received_datetimeobj'].strftime('%b %d %Y %H:%M:%S')
 				self.send_all(log)
 		except:
 			pass
-
+		try:
+			log=linha
+			if "body" in log:
+				if log['body'] == "Bad Request":
+					url=log['body']['url']
+				else:
+					url=log['url']
+				if "statusCode" not in log:
+					log['statusCode'] = "Null"
+				if "url" not in log and "url" not in log['body']:
+					url = "Null"
+				url=url.replace("[masked_session_id]","").replace("[masked_api_key]","")
+				log['url'] = url
+				log['owasp'] = self.owasp(log['url'])
+				if log['owasp']:
+					self.send_all(log)
+		except Exception as e:
+			print(e,"error")
+			pass
 
 	def run(self):
-		while True:
-			try:
-				for linha in Pygtail(self.conf['apache_log']):
-					t = Thread(target=self.connections, args=(linha,))
-					t.start()
-				# Prevent processing overflow
-			except IOError:
-				print('[-] Log not found: {}, waiting...'.format(self.conf['apache_log']))
-				sleep(5)
-			except:
-				pass
-			finally:
-				sleep(0.01)
+		try:
+			process = subprocess.Popen(shlex.split("aws logs tail $GROUP_NAME --follow --profile $PROFILE --region us-east-1 --format short --since 5m"), stdout=subprocess.PIPE)
+			while True:
+				output = process.stdout.readline()
+				if output == '' and process.poll() is not None:
+					break
+				if output:
+					rec=output[20:].strip().decode("utf-8")
+					if '{"service":' in rec:
+						rec=json.loads(rec)
+						rec['timestamp']=output[:20].strip()
+						t = Thread(target=self.connections, args=(rec,))
+						t.start()
+		# Prevent processing overflow
+		except Exception as e:
+			print(e)
+			exit()
+		finally:
+			sleep(0.01)
 
 
 if __name__ == '__main__':
